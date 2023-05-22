@@ -1,18 +1,15 @@
-﻿from os import name
-
-from PyQt5 import QtCore, QtGui, QtWidgets, Qt
+﻿from PyQt5 import QtCore
+from PyQt5.QtCore import pyqtSignal
 from pynput.keyboard import Key, Controller
 
-import telebot, time
-from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardMarkup, KeyboardButton, \
-    ReplyKeyboardRemove
-
-from funk import GetSetting
+import telebot
+import time
+from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardRemove, Message
 
 
 class TextHandler:
-    def text_command(self, message):
-        user_type = GetSetting().check_user(message.json['chat'])
+    def text_command(self, message: Message):
+        user_type = self.parent.settings.check_user(message.json['chat'])
 
         if user_type == "baned":
             self.bot.send_message(chat_id=message.chat.id, text=f"id {message.json['chat']['id']} заблокирован",
@@ -25,12 +22,22 @@ class TextHandler:
         elif user_type == "new":
             self.bot.send_message(chat_id=message.chat.id,
                                   text=f"{message.json['chat']['first_name']} ✌️\nЗапрос отправлен")
+            data = {
+                "id": message.from_user.id,
+                "first_name": message.from_user.first_name,
+                "username": message.from_user.username,
+                "type": "new"
+            }
+            _cls = self.parent.settings
+            if data not in _cls.new:
+                _cls.new.append(data)
+            self.new_user.emit(data)
         return
 
 
 class CallbackHandler:
     def callback_command(self, call):
-        user_type = GetSetting().check_user(call.json['from'])
+        user_type = self.parent.settings.check_user(call.json['from'])
 
         if user_type == "baned":
             self.bot.send_message(chat_id=call.from_user.id, text=f"id {call.from_user.id} заблокирован",
@@ -94,7 +101,10 @@ class BotStreamThread(
     TextHandler,
     CallbackHandler
 ):
-    def __init__(self, bot_id):
+    new_user = pyqtSignal(dict)
+
+    def __init__(self, bot_id, parent):
+        self.parent = parent
         QtCore.QThread.__init__(self)
         TextHandler.__init__(self)
         CallbackHandler.__init__(self)

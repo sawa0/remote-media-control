@@ -7,9 +7,9 @@ from funk import GetSetting
 
 class UserItem:
 
-    def __init__(self, user_group_form_layout, settings):
+    def __init__(self, user_group_form_layout, settings, main_parent):
         self.settings = settings
-        self.cls_settings = GetSetting()
+        self.cls_settings = main_parent.settings
         self.setupUi(user_group_form_layout)
 
     def setupUi(self, user_group_form_layout):
@@ -117,8 +117,9 @@ class UserItem:
         self.cls_settings.update_user(self.settings["id"], self.settings)
 
 
-class user_group_form():
-    def __init__(self, parent):
+class user_group_form:
+    def __init__(self, parent, main_parent):
+        self.main_parent = main_parent
         self.widget = QtWidgets.QFrame(parent)
         self.layout = parent.layout
         self.users_items = []
@@ -155,7 +156,7 @@ color: rgb(250,250,250);}""")
 
         self.verticalLayout.addWidget(self.user_group_summary)
 
-        self.btn_detais_change_state.clicked.connect(lambda: self.showe_stage_chenge())
+        self.btn_detais_change_state.clicked.connect(self.showe_stage_chenge)
 
     def showe_stage_chenge(self):
         if self.showe_stage:
@@ -172,12 +173,13 @@ color: rgb(250,250,250);}""")
     def add_users(self, user_list):
         self.users_items = []
         for i in user_list:
-            self.users_items.append(UserItem(self.verticalLayout, i))
+            self.users_items.append(UserItem(self.verticalLayout, i, self.main_parent))
 
 
-class user_group_item_form():
-    def __init__(self, parent, settings, do_show=False):
-        self.form = user_group_form(parent)
+class user_group_item_form:
+    def __init__(self, parent, settings, main_parent=None, do_show=False):
+        self.form = user_group_form(parent, main_parent)
+        self.main_parent = main_parent
         self.form.btn_detais_change_state.setText(settings[0])
 
         self.users = settings[1]
@@ -198,41 +200,21 @@ class user_group_item_form():
         self.form.showe_stage_chenge()
         self.form.showe_stage_chenge()
 
-        if self.users == []:
-            self.form.widget.hide()
-        else:
-            self.form.widget.show()
+        if not self.users:
+            return self.form.widget.hide()
+        self.form.widget.show()
 
 
 class user_group_new_form(user_group_item_form):
-    def __init__(self, parent):
-        super().__init__(parent, ["Новые пользователи", GetSetting().new], do_show=True)
+    def __init__(self, parent, main_parent):
+        super().__init__(parent, ["Новые пользователи", main_parent.settings.new], main_parent, do_show=True)
 
 
 class user_group_user_form(user_group_item_form):
-    def __init__(self, parent):
-        super().__init__(parent, ["Пользователи", GetSetting().users], do_show=True)
+    def __init__(self, parent, main_parent):
+        super().__init__(parent, ["Пользователи", main_parent.settings.users], main_parent, do_show=True)
 
 
 class user_group_baned_form(user_group_item_form):
-    def __init__(self, parent):
-        super().__init__(parent, ["Заблокированные", GetSetting().baned])
-
-# class user_group_user_form():
-#    def __init__(self, parent):
-#        self.form = user_group_form(parent)
-
-#        if settings.users + settings.admins != []:
-#            self.form.user_group_name.setText("Пользователи")
-#            self.form.add_users(settings.users + settings.admins)
-#            self.form.Form.show()
-
-
-# class user_group_baned_form():
-#    def __init__(self, parent):
-#        self.form = user_group_form(parent)
-
-#        if settings.baned != []:
-#            self.form.user_group_name.setText("Заблокированные")
-#            self.form.add_users(settings.baned)
-#            self.form.Form.show()
+    def __init__(self, parent, main_parent):
+        super().__init__(parent, ["Заблокированные", main_parent.settings.baned], main_parent, do_show=False)

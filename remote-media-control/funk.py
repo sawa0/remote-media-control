@@ -5,11 +5,10 @@ from PyQt5.QtCore import pyqtSignal
 
 
 class GetSetting:
-    page_users_update = pyqtSignal()
 
-    def __init__(self):
+    def __init__(self, parent=None):
         self.remote_path = shell.SHGetKnownFolderPath(shellcon.FOLDERID_LocalAppData) + "\\remote_video_control"
-        print(self.remote_path)
+        self.parent = parent
 
         if not os.path.exists(self.remote_path):
             os.mkdir(self.remote_path)
@@ -20,12 +19,11 @@ class GetSetting:
         if not os.path.exists(self.remote_path + "\\users"):
             open(self.remote_path + "\\users", "w", encoding='utf-8').close()
 
-        #############################################################
         #    Достаём настройки из файла сохранений.                 #
         with open(self.remote_path + "\\bot_settings") as file:
             self.__settings_data = file.read()
         self.__settings_data = self.__settings_data.split("\n")
-        #############################################################
+
         #   Настройки, хранящиеся в файле переношу в переменные     #
         self.bot_token = ""
         self.do_autorun = ""
@@ -35,14 +33,12 @@ class GetSetting:
                 self.bot_token = i[6:]
             elif i[0:8] == "AUTORUN=":
                 self.do_autorun = i[8:]
-        #############################################################
 
-        #################################################################
         #      Достаём списки пользователей из файла сохранений.        #
         with open(self.remote_path + "\\users", encoding='utf-8') as file:
             self.__users_data = file.read()
         self.__users_data = self.__users_data.split("\n")
-        #################################################################
+
         #     Переношу в переменные восстановленных пользователей       #
         self.users = []
         self.baned = []
@@ -51,38 +47,42 @@ class GetSetting:
         for i in self.__users_data:
             try:
                 i = eval(i)
-                if i['type'] == "user":
-                    self.users.append(i)
-                elif i['type'] == "baned":
-                    self.baned.append(i)
-                elif i['type'] == "new":
-                    self.new.append(i)
             except:
-                ...
-        #################################################################
+                continue
+
+            if i['type'] == "user":
+                self.users.append(i)
+            elif i['type'] == "baned":
+                self.baned.append(i)
+            elif i['type'] == "new":
+                self.new.append(i)
 
     def update_user(self, id, user):
+
         for item in self.users:
             if item.get("id") == id:
                 self.users.remove(item)
+
         for item in self.baned:
             if item.get("id") == id:
                 self.baned.remove(item)
+
         for item in self.new:
             if item.get("id") == id:
                 self.new.remove(item)
 
         if user["type"] == "user":
             self.users.append(user)
+
         elif user["type"] == "baned":
             self.baned.append(user)
+
         elif user["type"] == "new":
             self.new.append(user)
 
-        # self.update_user_file()
-        # self.settings.emit()
-        # self.page_users_update.emit()
+        self.parent.page_users_update()
         self.update_user_file()
+        self.parent.update()
 
     #   Обновление файла с пользователями
     def update_user_file(self):
@@ -105,8 +105,6 @@ class GetSetting:
 
     #   Проверка наличия, и прав пользователя
     def check_user(self, user):
-        print(user)
-
         if [i for i in self.users if i["id"] == i["id"]]:
             return "user"
 
@@ -124,7 +122,6 @@ class GetSetting:
         }
         self.new.append(data)
         self.update_user_file()
-        # self.settings.emit()
         return "new"
 
 

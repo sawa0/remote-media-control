@@ -1,11 +1,15 @@
 import sys, time, os, requests, webbrowser
+
+import psutil
+
+import bot_ui
+import wigets
+import bot_stream as Bot
+
 from PyQt5 import QtCore, QtGui, QtWidgets, Qt
 from PyQt5.QtWidgets import *
 
 from funk import GetSetting
-
-import funk, bot_ui, wigets
-import bot_stream as Bot
 
 
 class bot_stream(Bot.BotStreamThread):
@@ -25,7 +29,7 @@ class MainWindow(QMainWindow):
         self.ui = bot_ui.Ui_MainWindow()
         self.ui.setupUi(self)
 
-        self.settings = GetSetting()
+        self.settings = GetSetting(self)
 
         self.gui_config()
 
@@ -33,7 +37,6 @@ class MainWindow(QMainWindow):
         self.settings_bakcup()  # Восстановление настроек из файла
         self.page_users_filling()  # Заполнение страницы с пользователями
 
-        # self.settings.page_users_update.connect(self.page_users_update)
         self.settings.page_users_update = self.page_users_update
         self.settings.notification = self.tray_icon.showMessage
 
@@ -48,15 +51,20 @@ class MainWindow(QMainWindow):
 
         self.ui.scrollAreaWidgetContents.layout = self.ui.verticalLayout_6
 
-        self.ui.page_users_frame_neve = wigets.user_group_new_form(self.ui.scrollAreaWidgetContents)
-        self.ui.page_users_frame_users = wigets.user_group_user_form(self.ui.scrollAreaWidgetContents)
-        self.ui.page_users_frame_banned = wigets.user_group_baned_form(self.ui.scrollAreaWidgetContents)
+        self.ui.page_users_frame_neve = wigets.user_group_new_form(self.ui.scrollAreaWidgetContents, self)
+        self.ui.page_users_frame_users = wigets.user_group_user_form(self.ui.scrollAreaWidgetContents, self)
+        self.ui.page_users_frame_banned = wigets.user_group_baned_form(self.ui.scrollAreaWidgetContents, self)
 
         self.ui.scrollAreaWidgetContents.layout.addItem(
-            QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Minimum, QtWidgets.QSizePolicy.Expanding))
+            QtWidgets.QSpacerItem(20, 40, QtWidgets.QSizePolicy.Policy.Minimum, QtWidgets.QSizePolicy.Policy.Expanding))
 
     def bot_start(self):
-        self.bot_stream = Bot.BotStreamThread(self.settings.bot_token)
+        self.bot_stream = Bot.BotStreamThread(self.settings.bot_token, self)
+        self.bot_stream.new_user.connect(self.new_user)
+
+    def new_user(self, data):
+        print(data, "====")
+        self.ui.page_users_frame_neve.user_list_update()
 
     def tray_config(self):
 
@@ -138,18 +146,16 @@ class MainWindow(QMainWindow):
         self.ui.btn_bf_link.clicked.connect(lambda: webbrowser.open('https://t.me/BotFather'))
 
     def update_bot_token(self, token):
-        print(token)
 
-        def cheak_token(token):
+        def check_token():
             res = requests.get(f"https://api.telegram.org/bot{token}/getMe")
             if res.status_code == 200:
                 return True
             elif res.status_code == 401:
                 return False
-            print(res.status_code)
             return False
 
-        if cheak_token(token):
+        if check_token():
             self.settings.update_settings("bot_token", token)
             self.ui.lineEdit_2.setText("")
             self.ui.lineEdit_2.setPlaceholderText(token)
@@ -164,10 +170,17 @@ class MainWindow(QMainWindow):
         else:
             self.settings.update_settings("do_autorun", "False")  # настроек
 
+    def closeEvent(self, a0: QtGui.QCloseEvent) -> None:
+        parent = os.getpid()
+        ps_parent = psutil.Process(parent)
+        for child in ps_parent.children():
+            child.terminate()
+        ps_parent.kill()
+
     def moveWindow(self, e):
         try:
-            if self.isMaximized() == False:
-                if e.buttons() == QtCore.Qt.LeftButton:
+            if self.isMaximized() is False:
+                if e.buttons() == QtCore.Qt.MouseButton.LeftButton:
                     self.move(e.globalPos() - (self.start_click_pos - self.start_window_pos))
                     e.accept()
         except AttributeError:
