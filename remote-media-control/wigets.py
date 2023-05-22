@@ -2,14 +2,14 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtCore import pyqtSignal
 import webbrowser, re
 
-from funk import settings as settings
+from funk import GetSetting
 
 
-class user_item():
-
+class UserItem:
 
     def __init__(self, user_group_form_layout, settings):
         self.settings = settings
+        self.cls_settings = GetSetting()
         self.setupUi(user_group_form_layout)
 
     def setupUi(self, user_group_form_layout):
@@ -17,48 +17,55 @@ class user_item():
         self.user_item_frame = QtWidgets.QFrame()
         self.user_item_frame.setMinimumSize(QtCore.QSize(360, 62))
         self.user_item_frame.setMaximumSize(QtCore.QSize(360, 62))
-        self.user_item_frame.setStyleSheet("QFrame{\nfont: 9pt \"MS Shell Dlg 2\";\nbackground-color: rgb(54, 65, 72);\ncolor: rgb(240, 240, 240);\n"
-"margin-left: 6px;\nmargin-right: 16px;\npadding-left: 4px;\nborder: solid;\nborder-width: 4px;\nborder-color: rgb(29, 27, 27);\nborder-radius: 15px;}")
+        self.user_item_frame.setStyleSheet(
+            "QFrame{\nfont: 9pt \"MS Shell Dlg 2\";\nbackground-color: rgb(54, 65, 72);\ncolor: rgb(240, 240, 240);\n"
+            "margin-left: 6px;\nmargin-right: 16px;\npadding-left: 4px;\nborder: solid;\nborder-width: 4px;\nborder-color: rgb(29, 27, 27);\nborder-radius: 15px;}")
 
         self.label_user_name = QtWidgets.QLabel(self.user_item_frame)
         self.label_user_name.setMaximumSize(QtCore.QSize(16777215, 20))
-        self.label_user_name.setStyleSheet("color: rgb(240, 240, 240);\nfont: 14pt \"MS Shell Dlg 2\";\nbackground-color: transparent;\n"
-"margin-left: 1px;\nmargin-right: 0px;\npadding-left: 0px;\nborder-width: 0px;\nborder-radius: 0px;")
+        self.label_user_name.setStyleSheet(
+            "color: rgb(240, 240, 240);\nfont: 14pt \"MS Shell Dlg 2\";\nbackground-color: transparent;\n"
+            "margin-left: 1px;\nmargin-right: 0px;\npadding-left: 0px;\nborder-width: 0px;\nborder-radius: 0px;")
 
         self.frame_extendet_user_info = QtWidgets.QFrame(self.user_item_frame)
         self.frame_extendet_user_info.setStyleSheet("margin-left: 0px;\n"
-"margin-right: 0px;\n"
-"border-width: 0px;\n"
-"border-radius: 0px;\n"
-"padding-left: 0px;\n"
-"background-color: transparent;")
+                                                    "margin-right: 0px;\n"
+                                                    "border-width: 0px;\n"
+                                                    "border-radius: 0px;\n"
+                                                    "padding-left: 0px;\n"
+                                                    "background-color: transparent;")
 
         self.label_user_id = QtWidgets.QLabel(self.frame_extendet_user_info)
         self.label_user_id.setMaximumSize(QtCore.QSize(16777215, 18))
-        self.label_user_id.setStyleSheet("color: rgb(150, 170, 200);\nfont: 10pt \"MS Shell Dlg 2\";\nbackground-color: transparent;\npadding-left:4px;")
+        self.label_user_id.setStyleSheet(
+            "color: rgb(150, 170, 200);\nfont: 10pt \"MS Shell Dlg 2\";\nbackground-color: transparent;\npadding-left:4px;")
 
         self.btn_link_username = QtWidgets.QPushButton(self.frame_extendet_user_info)
-        self.btn_link_username.setStyleSheet("QPushButton{\nmargin-left: 0px;\nmargin-right: 0px;\nborder-width: 0px;\nborder-radius: 0px;\ncolor: rgb(150, 170, 200);\n"
-"font: 10pt \"MS Shell Dlg 2\";\nbackground-color: transparent;\npadding-left: 4px;\npadding-right: 4px;}QPushButton:hover{\nborder-radius: 5px;\nbackground-color: rgb(57, 91, 136);}")
+        self.btn_link_username.setStyleSheet(
+            "QPushButton{\nmargin-left: 0px;\nmargin-right: 0px;\nborder-width: 0px;\nborder-radius: 0px;\ncolor: rgb(150, 170, 200);\n"
+            "font: 10pt \"MS Shell Dlg 2\";\nbackground-color: transparent;\npadding-left: 4px;\npadding-right: 4px;}QPushButton:hover{\nborder-radius: 5px;\nbackground-color: rgb(57, 91, 136);}")
 
         spacerItem = QtWidgets.QSpacerItem(40, 20, QtWidgets.QSizePolicy.Expanding, QtWidgets.QSizePolicy.Minimum)
 
         self.frame_update_user = QtWidgets.QFrame(self.user_item_frame)
-        self.frame_update_user.setStyleSheet("margin-left: 0px;\nmargin-right: 0px;\nborder-width: 0px;\nborder-radius: 0px;\nbackground-color: transparent;")
+        self.frame_update_user.setStyleSheet(
+            "margin-left: 0px;\nmargin-right: 0px;\nborder-width: 0px;\nborder-radius: 0px;\nbackground-color: transparent;")
 
         self.comboBox = QtWidgets.QComboBox(self.frame_update_user)
         self.comboBox.setMinimumSize(QtCore.QSize(65, 26))
         self.comboBox.setMaximumSize(QtCore.QSize(65, 26))
-        self.comboBox.setStyleSheet("color: rgb(240, 240, 240);\nfont: 10pt \"MS Shell Dlg 2\";\nbackground-color: transparent;\nborder-radius: 5px;\nborder: solid;\n"
-"border-width: 3px;\nborder-color: rgb(29, 27, 27);\nmargin-left: 0px;\nmargin-right: 0px;\npadding-left: 3px;")
+        self.comboBox.setStyleSheet(
+            "color: rgb(240, 240, 240);\nfont: 10pt \"MS Shell Dlg 2\";\nbackground-color: transparent;\nborder-radius: 5px;\nborder: solid;\n"
+            "border-width: 3px;\nborder-color: rgb(29, 27, 27);\nmargin-left: 0px;\nmargin-right: 0px;\npadding-left: 3px;")
         self.comboBox.addItem("юзер")
         self.comboBox.addItem("бан")
 
         self.btn_uplay_user_chenge = QtWidgets.QPushButton(self.frame_update_user)
         self.btn_uplay_user_chenge.setMinimumSize(QtCore.QSize(20, 20))
         self.btn_uplay_user_chenge.setMaximumSize(QtCore.QSize(20, 20))
-        self.btn_uplay_user_chenge.setStyleSheet("QPushButton{\nmargin-left: 0px;\nmargin-right: 0px;\nborder-width: 0px;\ncolor: rgb(240, 240, 240);\n"
-"border-radius: 0px;\nbackground-color: transparent;}\nQPushButton:hover{\nborder-radius: 5px;\nbackground-color: rgb(57, 91, 136);}\n")
+        self.btn_uplay_user_chenge.setStyleSheet(
+            "QPushButton{\nmargin-left: 0px;\nmargin-right: 0px;\nborder-width: 0px;\ncolor: rgb(240, 240, 240);\n"
+            "border-radius: 0px;\nbackground-color: transparent;}\nQPushButton:hover{\nborder-radius: 5px;\nbackground-color: rgb(57, 91, 136);}\n")
 
         icon = QtGui.QIcon()
         icon.addPixmap(QtGui.QPixmap("assets/next.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
@@ -90,7 +97,9 @@ class user_item():
 
         self.label_user_name.setText(self.settings['first_name'])
         self.label_user_id.setText(str(self.settings['id']))
-        self.btn_link_username.setText("@" + self.settings['username'])
+
+        username = self.settings.get("username", None)
+        self.btn_link_username.setText("@" + username if username else "")
 
         self.btn_link_username.clicked.connect(lambda: webbrowser.open(f"https://t.me/{self.settings['username']}"))
 
@@ -105,7 +114,7 @@ class user_item():
         elif Index == 1:
             self.settings["type"] = "baned"
 
-        settings.update_user(self.settings["id"], self.settings)
+        self.cls_settings.update_user(self.settings["id"], self.settings)
 
 
 class user_group_form():
@@ -116,7 +125,7 @@ class user_group_form():
         self.showe_stage = True
 
         self.setupUi()
-        
+
     def setupUi(self):
         self.widget.setFixedSize(360, 35)
         self.widget.setStyleSheet("margin-left: 10px;\nbackground-color: rgb(37, 46, 61);\nborder-radius: 8px;")
@@ -124,7 +133,7 @@ class user_group_form():
         self.verticalLayout = QtWidgets.QVBoxLayout(self.widget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 8)
         self.verticalLayout.setSpacing(8)
-         
+
         self.user_group_summary = QtWidgets.QFrame(self.widget)
         self.user_group_summary.setMinimumSize(QtCore.QSize(0, 35))
         self.user_group_summary.setMaximumSize(QtCore.QSize(16777215, 35))
@@ -141,7 +150,7 @@ QPushButton:hover{
 background-color: rgb(64, 80, 106);
 font: 75 16pt \"MS Shell Dlg 2\";
 color: rgb(250,250,250);}""")
-        
+
         self.layout.addWidget(self.widget)
 
         self.verticalLayout.addWidget(self.user_group_summary)
@@ -163,11 +172,11 @@ color: rgb(250,250,250);}""")
     def add_users(self, user_list):
         self.users_items = []
         for i in user_list:
-            self.users_items.append(user_item(self.verticalLayout, i))
+            self.users_items.append(UserItem(self.verticalLayout, i))
 
 
 class user_group_item_form():
-    def __init__(self, parent, settings, do_show = False):
+    def __init__(self, parent, settings, do_show=False):
         self.form = user_group_form(parent)
         self.form.btn_detais_change_state.setText(settings[0])
 
@@ -195,30 +204,21 @@ class user_group_item_form():
             self.form.widget.show()
 
 
-
 class user_group_new_form(user_group_item_form):
     def __init__(self, parent):
-        super().__init__(parent, ["Новые пользователи", settings.new], do_show = True)
+        super().__init__(parent, ["Новые пользователи", GetSetting().new], do_show=True)
+
 
 class user_group_user_form(user_group_item_form):
     def __init__(self, parent):
-        super().__init__(parent, ["Пользователи", settings.users], do_show = True)
+        super().__init__(parent, ["Пользователи", GetSetting().users], do_show=True)
+
 
 class user_group_baned_form(user_group_item_form):
     def __init__(self, parent):
-        super().__init__(parent, ["Заблокированные", settings.baned])
+        super().__init__(parent, ["Заблокированные", GetSetting().baned])
 
-
-
-
-
-
-
-
-
-
-
-#class user_group_user_form():
+# class user_group_user_form():
 #    def __init__(self, parent):
 #        self.form = user_group_form(parent)
 
@@ -228,8 +228,7 @@ class user_group_baned_form(user_group_item_form):
 #            self.form.Form.show()
 
 
-
-#class user_group_baned_form():
+# class user_group_baned_form():
 #    def __init__(self, parent):
 #        self.form = user_group_form(parent)
 
@@ -237,7 +236,3 @@ class user_group_baned_form(user_group_item_form):
 #            self.form.user_group_name.setText("Заблокированные")
 #            self.form.add_users(settings.baned)
 #            self.form.Form.show()
-
-
-
-
