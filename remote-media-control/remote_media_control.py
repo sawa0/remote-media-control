@@ -1,7 +1,5 @@
 import sys, time, os, requests, webbrowser
 
-import psutil
-
 import bot_ui
 import wigets
 import bot_stream as Bot
@@ -63,7 +61,6 @@ class MainWindow(QMainWindow):
         self.bot_stream.new_user.connect(self.new_user)
 
     def new_user(self, data):
-        print(data, "====")
         self.ui.page_users_frame_neve.user_list_update()
 
     def tray_config(self):

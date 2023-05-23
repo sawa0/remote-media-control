@@ -28,6 +28,7 @@
     <Content Include="assets\next.png" />
     <Content Include="assets\save_icon.png" />
     <Content Include="assets\up.png" />
+    <Content Include="Зависимости.txt" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="bot_stream.py" />
