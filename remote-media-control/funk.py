@@ -105,19 +105,23 @@ class GetSetting:
 
     #   Проверка наличия, и прав пользователя
     def check_user(self, user):
-        if [i for i in self.users if i["id"] == i["id"]]:
-            return "user"
 
-        if [i for i in self.baned if i["id"] == i["id"]]:
-            return "baned"
+        for i in self.users:
+            if user["id"] == i["id"]:
+                return "user"
 
-        if [i for i in self.new if i["id"] == i["id"]]:
-            return "new"
+        for i in self.baned:
+            if user["id"] == i["id"]:
+                return "baned"
+
+        for i in self.new:
+            if user["id"] == i["id"]:
+                return "new"
 
         data = {
-            'id': user.get("id", None),
-            'first_name': user.get("first_name", None),
-            'username': user.get("username", None),
+            'id': user["id"],
+            'first_name': user["first_name"],
+            'username': user["username"],
             'type': 'new'
         }
         self.new.append(data)
