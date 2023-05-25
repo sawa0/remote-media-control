@@ -99,9 +99,12 @@ class UserItem:
         self.label_user_id.setText(str(self.settings['id']))
 
         username = self.settings.get("username", None)
-        self.btn_link_username.setText("@" + username if username else "")
 
-        self.btn_link_username.clicked.connect(lambda: webbrowser.open(f"https://t.me/{self.settings['username']}"))
+        if username == None:
+            self.btn_link_username.hide()
+        else:
+            self.btn_link_username.setText("@" + username if username else "")
+            self.btn_link_username.clicked.connect(lambda: webbrowser.open(f"https://t.me/{self.settings['username']}"))
 
         self.btn_uplay_user_chenge.clicked.connect(self.uplay_user_chenge)
 
@@ -129,24 +132,24 @@ class user_group_form:
 
     def setupUi(self):
         self.widget.setFixedSize(360, 35)
-        self.widget.setStyleSheet("margin-left: 10px;\nbackground-color: rgb(37, 46, 61);\nborder-radius: 8px;")
+        self.widget.setStyleSheet("margin-left: 10px;\nbackground-color: rgb(37, 46, 61);\nborder-radius: 15px;")
 
         self.verticalLayout = QtWidgets.QVBoxLayout(self.widget)
-        self.verticalLayout.setContentsMargins(0, 0, 0, 8)
+        self.verticalLayout.setContentsMargins(0, 0, 0, 4)
         self.verticalLayout.setSpacing(8)
 
         self.user_group_summary = QtWidgets.QFrame(self.widget)
         self.user_group_summary.setMinimumSize(QtCore.QSize(0, 35))
         self.user_group_summary.setMaximumSize(QtCore.QSize(16777215, 35))
-        self.user_group_summary.setStyleSheet("margin-left: 0px;\nborder-radius: 8;")
+        self.user_group_summary.setStyleSheet("margin-left: 0px;\nborder-radius: 15;")
 
         self.btn_detais_change_state = QtWidgets.QPushButton(self.widget)
         self.btn_detais_change_state.setFixedSize(360, 35)
         self.btn_detais_change_state.setStyleSheet("""QPushButton{
 font: 16pt \"MS Shell Dlg 2\";
 color: rgb(230,230,230);
-border-radius: 8;
-background-color: transparent;}
+border-radius: 13;
+background-color: rgb(55, 66, 86);}
 QPushButton:hover{
 background-color: rgb(64, 80, 106);
 font: 75 16pt \"MS Shell Dlg 2\";

@@ -11,6 +11,7 @@
     <OutputPath>.</OutputPath>
     <Name>remote-media-control</Name>
     <RootNamespace>remote-media-control</RootNamespace>
+    <InterpreterId>Global|VisualStudio|pyqt5 vnev</InterpreterId>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,6 +37,9 @@
     <Compile Include="funk.py" />
     <Compile Include="remote_media_control.py" />
     <Compile Include="wigets.py" />
+  </ItemGroup>
+  <ItemGroup>
+    <InterpreterReference Include="Global|VisualStudio|pyqt5 vnev" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

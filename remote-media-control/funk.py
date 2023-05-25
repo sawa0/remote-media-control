@@ -121,7 +121,7 @@ class GetSetting:
         data = {
             'id': user["id"],
             'first_name': user["first_name"],
-            'username': user["username"],
+            'username': user.get("username", None),
             'type': 'new'
         }
         self.new.append(data)
