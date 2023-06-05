@@ -36,6 +36,7 @@
     <Compile Include="bot_ui.py" />
     <Compile Include="funk.py" />
     <Compile Include="remote_media_control.py" />
+    <Compile Include="resource.py" />
     <Compile Include="wigets.py" />
   </ItemGroup>
   <ItemGroup>
