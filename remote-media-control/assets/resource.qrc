@@ -1,0 +1,6 @@
+<RCC>
+  <qresource prefix="/">
+    <file>next.png</file>
+    <file>save_icon.png</file>
+  </qresource>
+</RCC>

@@ -3,6 +3,7 @@ from PyQt5.QtCore import pyqtSignal
 import webbrowser, re
 
 from funk import GetSetting
+import resource
 
 
 class UserItem:
@@ -68,7 +69,7 @@ class UserItem:
             "border-radius: 0px;\nbackground-color: transparent;}\nQPushButton:hover{\nborder-radius: 5px;\nbackground-color: rgb(57, 91, 136);}\n")
 
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("assets/next.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(":/next.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
 
         self.btn_uplay_user_chenge.setIcon(icon)
         self.btn_uplay_user_chenge.setIconSize(QtCore.QSize(18, 18))

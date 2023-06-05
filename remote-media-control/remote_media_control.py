@@ -10,6 +10,7 @@ from PyQt5.QtWidgets import *
 from funk import GetSetting
 
 
+
 class bot_stream(Bot.BotStreamThread):
     def __init__(self, ui):
         super().__init__(ui)

@@ -9,7 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import resource
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -110,7 +110,7 @@ class Ui_MainWindow(object):
         self.scrollAreaWidgetContents.setObjectName("scrollAreaWidgetContents")
         self.verticalLayout_6 = QtWidgets.QVBoxLayout(self.scrollAreaWidgetContents)
         self.verticalLayout_6.setContentsMargins(0, 10, 0, 0)
-        self.verticalLayout_6.setSpacing(20)
+        self.verticalLayout_6.setSpacing(5)
         self.verticalLayout_6.setObjectName("verticalLayout_6")
         self.scrollArea.setWidget(self.scrollAreaWidgetContents)
         self.horizontalLayout_3.addWidget(self.scrollArea)
@@ -123,8 +123,8 @@ class Ui_MainWindow(object):
         self.verticalLayout_4.setSpacing(15)
         self.verticalLayout_4.setObjectName("verticalLayout_4")
         self.frame = QtWidgets.QFrame(self.page_bot_setings)
-        self.frame.setMinimumSize(QtCore.QSize(364, 100))
-        self.frame.setMaximumSize(QtCore.QSize(364, 100))
+        self.frame.setMinimumSize(QtCore.QSize(364, 80))
+        self.frame.setMaximumSize(QtCore.QSize(364, 80))
         self.frame.setStyleSheet("background-color: rgb(37, 46, 61);\n"
 "border-radius: 8px;")
         self.frame.setFrameShape(QtWidgets.QFrame.StyledPanel)
@@ -182,7 +182,7 @@ class Ui_MainWindow(object):
 "QPushButton:hover{background-color: rgb(120, 140, 255);}")
         self.btn_save.setText("")
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("my ui/assets/baton_picturie/save_icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(":/save_icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         self.btn_save.setIcon(icon)
         self.btn_save.setIconSize(QtCore.QSize(20, 20))
         self.btn_save.setObjectName("btn_save")
@@ -206,11 +206,6 @@ class Ui_MainWindow(object):
         self.lineEdit_2.setMaxLength(32767)
         self.lineEdit_2.setObjectName("lineEdit_2")
         self.verticalLayout_2.addWidget(self.lineEdit_2)
-        self.frame_3 = QtWidgets.QFrame(self.frame)
-        self.frame_3.setFrameShape(QtWidgets.QFrame.StyledPanel)
-        self.frame_3.setFrameShadow(QtWidgets.QFrame.Raised)
-        self.frame_3.setObjectName("frame_3")
-        self.verticalLayout_2.addWidget(self.frame_3)
         self.verticalLayout_4.addWidget(self.frame)
         self.frame_8 = QtWidgets.QFrame(self.page_bot_setings)
         self.frame_8.setMinimumSize(QtCore.QSize(364, 81))
